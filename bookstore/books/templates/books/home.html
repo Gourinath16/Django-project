@@ -48,8 +48,10 @@
                                 <img src="{% static 'images/book1.jpg' %}" alt="{{ book.title }}" class="w-full h-40 object-cover rounded-md mb-4">
                             {% elif forloop.counter == 2 %}
                                 <img src="{% static 'images/book2.jpg' %}" alt="{{ book.title }}" class="w-full h-40 object-cover rounded-md mb-4">
-                            {% else %}
+                            {% elif forloop.counter == 3 %}
                                 <img src="{% static 'images/book3.jpg' %}" alt="{{ book.title }}" class="w-full h-40 object-cover rounded-md mb-4">
+                            {%else%} 
+                                <img src="{% static 'images/book4.jpg' %}" alt="{{ book.title }}" class="w-full h-40 object-cover rounded-md mb-4">
                             {% endif %}
                             <h3 class="text-lg font-semibold text-gray-900">{{ book.title }}</h3>
                             <p class="text-gray-600 text-sm">{{ book.author }}</p>
