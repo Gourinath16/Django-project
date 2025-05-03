@@ -1,6 +1,7 @@
 from django.views.generic import TemplateView, ListView, DetailView
 from django.shortcuts import redirect
 from .models import Book, Contact,Profile
+from .form import ProfileForm
 
 class HomeView(TemplateView):
     template_name = 'books/home.html'
@@ -16,6 +17,7 @@ class HomeView(TemplateView):
         message = request.POST.get('message')
         Contact.objects.create(name=name, email=email, message=message)
         return redirect('books:home')
+        return self.get_context_data()
 
 class BookListView(ListView):
     model = Book
@@ -35,9 +37,28 @@ class BookDetailView(DetailView):
 
 class MyProfileView(ListView):
     model = Profile
-    template_name = 'books/my_profile.html'
+    template_name = 'books/add_profile.html'
     context_object_name = 'profiles'
     def get_queryset(self):
-        return Profile.objects.filter(email='mahatogourinathkumar@gmail.com')
+        return Profile.objects.all()
 
-    
+class AddprofileView(TemplateView):
+    template_name = 'books/add_profile.html'
+
+    def get(self, request, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = ProfileForm()
+        return self.render_to_response(context)
+
+    def post(self, request, *args, **kwargs):
+        form = ProfileForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()  # Save the form directly
+            return redirect('books:home')  # Redirect to the home page
+        else:
+            # If the form is invalid, re-render the page with the form errors
+            context = self.get_context_data(form=form)
+            return self.render_to_response(context)
+
+
+   
